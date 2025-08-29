@@ -1,0 +1,217 @@
+Part 1: Project Requirement Document (PRD)
+Project Title
+Smart Data Analyzer - Drag-and-Drop Insight Generator
+
+Objective
+To build a web-based application where users can drag and drop their dataset (CSV, Excel, etc.) and receive automated insights, results, and predictions, including visualization, summaries, and optional machine learning outcomes.
+
+Goals
+Simple, no-code data analysis
+
+Intelligent insight generation from any structured dataset
+
+Optional ML-based prediction based on selected target columns
+
+User authentication and file persistence
+
+Target Users
+Non-technical users wanting quick analysis
+
+Data scientists needing quick exploration
+
+Business analysts and students
+
+Input
+File upload via drag-and-drop (CSV, XLSX)
+
+Optional selection of target/output column for prediction
+
+Optional selection of task type: summary, classification, regression, clustering, visualization
+
+Output
+Automatic dataset summary (rows, columns, null values, types)
+
+Data visualizations (bar charts, histograms, scatter plots, etc.)
+
+Correlation matrix & feature importance
+
+If prediction is requested:
+
+Model training (classification/regression)
+
+Accuracy score, confusion matrix, ROC curve, etc.
+
+Top features contributing to prediction
+
+Downloadable report (PDF/HTML)
+
+Core Features
+Feature	Description
+User Authentication	JWT-based login system with user-specific data storage
+Drag & Drop Upload	UI to drag and drop CSV/XLSX files
+Data Preview	Show top 5–10 rows of the dataset
+Auto Data Summary	Type detection, null counts, value ranges
+Insight Engine	Generate human-readable summaries
+Chart Generator	Auto plots based on column types
+ML Model Builder	Based on target column and task selected
+Result Dashboard	Shows performance, predictions, insights
+Report Export	Export analysis as PDF or HTML
+File Management	User-specific file storage and retrieval
+Results History	Persistent storage of all analysis results
+Navigation System	Multi-page application with React Router
+
+Tech Stack
+Layer	Technology
+Frontend	React.js + React Router + Modern CSS
+Backend	Python (FastAPI)
+Database	MongoDB with PyMongo
+ML Engine	Scikit-learn / XGBoost / Pandas / Matplotlib
+File Parsing	Pandas, OpenPyXL, CSV
+Visualization	Plotly, Seaborn, Matplotlib
+Authentication	JWT with bcrypt password hashing
+Deployment	Docker + AWS/GCP/Heroku
+Optional	Streamlit or Gradio (for quicker MVP)
+
+Security & Constraints
+Limit file size (e.g. 10 MB max)
+
+Sanitize uploaded data
+
+No sensitive info like passwords/SSNs allowed
+
+GDPR compliance if public
+
+JWT token-based authentication
+
+Password hashing with bcrypt
+
+User-specific data isolation
+
+Milestones
+Week	Deliverable
+1	UI/UX Design, file upload implementation
+2	Dataset parsing, basic stats summary
+3	Chart generation & visualization
+4	ML module for classification/regression
+5	Insights generation + report export
+6	Testing, bug fixes, deployment
+7	User authentication system
+8	File persistence and user management
+9	Multi-page navigation and results history
+10	Final testing and documentation
+
+Future Enhancements
+NLP insight explanations
+
+Real-time collaborative workspace
+
+API for programmatic access
+
+Multilingual support
+
+Chat-based insight querying ("What is the most correlated variable?")
+
+Advanced ML models (Random Forest, XGBoost, Neural Networks)
+
+Data preprocessing options
+
+Export results to various formats
+
+Part 2: Project Challenges & Recommendations
+Frontend Challenges (React)
+Drag-and-drop reliability: Use libraries like react-dropzone; validate file size/type
+
+Communicating with backend: Set up proxy in frontend or use CORS middleware in FastAPI
+
+Displaying dynamic visualizations: Use <img> for static files or Plotly components
+
+State management: Use React Context or Redux if many steps
+
+Responsiveness: Use TailwindCSS responsive utilities
+
+Navigation: Implement React Router for multi-page application
+
+Authentication state: Use localStorage for token persistence
+
+Backend Challenges (FastAPI + Python)
+Temporary file handling: Generate unique filenames, clean temp folders
+
+Auto ML decision-making: Use simple rule: few unique values = classification
+
+Missing or dirty data: Use pandas dropna(), validate types
+
+Scikit-learn model errors: Preprocess non-numeric columns with encoding
+
+Long processing time: Use background tasks or limit file size
+
+User authentication: Implement JWT with proper token management
+
+Database integration: Use MongoDB for flexible schema storage
+
+Visualization Challenges
+Wrong chart types: Use column type & unique value count to choose plots
+
+Serving plots/images: Save images in /static/, serve with StaticFiles
+
+Overloaded dashboards: Let user choose what to visualize
+
+Machine Learning Challenges
+Wrong model selection: Default to RandomForest or Linear models
+
+Overfitting or underfitting: Use proper train/test split or cross-validation
+
+Target column not suitable: Check for constant or invalid target values
+
+Report Generation Challenges
+PDF formatting issues: Use FPDF or ReportLab with proper layout
+
+Missing visual context: Ensure figures are saved before insertion
+
+Deployment Challenges
+Docker issues: Use fixed ports, .env, and test images
+
+Hosting static files: Serve frontend with backend or proxy using Nginx
+
+Security concerns: Validate inputs, limit file types and size
+
+Database setup: Configure MongoDB connection and indexes
+
+Bonus Tips
+Start small: Begin with only .csv and one ML model
+
+Log everything: Use logging for tracking crashes
+
+Test each module: Check upload, then EDA, then ML individually
+
+Add user control: Let users preview/edit columns
+
+Handle edge cases: Consider empty files, all-NaNs, etc
+
+Implement proper error handling for authentication
+
+Use environment variables for sensitive configuration
+
+Add comprehensive logging for debugging
+
+---
+
+## Project Structure (Updated)
+
+- frontend/   # React app with multi-page navigation
+  - src/
+    - components/  # Modular React components
+      - Navbar.js
+      - Home.js
+      - Results.js
+      - ResultDetail.js
+      - Files.js
+      - LoginModal.js
+    - App.js       # Main app with routing
+    - App.css      # Styling
+- backend/    # FastAPI app with authentication
+  - main.py       # API endpoints and ML logic
+  - requirements.txt
+- database/   # MongoDB integration
+  - mongo_client.py  # Database operations
+- readme      # Project documentation
+- README.md   # User-facing documentation

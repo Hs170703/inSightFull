@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:6.0
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=password
+      - MONGO_INITDB_DATABASE=insightfull_db
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - app-network
+
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONUNBUFFERED=1
+      - MONGO_URI=mongodb://admin:password@mongodb:27017
+      - MONGO_DB=insightfull_db
+      - JWT_SECRET=your-super-secret-jwt-key-change-in-production
+    volumes:
+      - ./backend:/app
+    depends_on:
+      - mongodb
+    networks:
+      - app-network
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+volumes:
+  mongodb_data:
+
+networks:
+  app-network:
+    driver: bridge 
